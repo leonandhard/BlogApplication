@@ -1,10 +1,10 @@
 package com.leonhard.blog.services.impl;
 
 import com.leonhard.blog.dtos.PostDto;
+import com.leonhard.blog.exception.ResourceNotFoundException;
 import com.leonhard.blog.model.Post;
 import com.leonhard.blog.repository.PostRepository;
 import com.leonhard.blog.services.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,8 +34,37 @@ public class PostServiceImpl implements PostService {
 
         List<Post> posts = postRepository.findAll();
 
-        return posts.stream().map(this::mapToDTO).collect(Collectors.toList());
+        return posts.stream().map(this::mapToDTO).collect(Collectors.toList()) ;
     }
+
+    @Override
+    public PostDto getPostById(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("post","id",id));
+        return mapToDTO(post);
+    }
+
+    @Override
+    public PostDto updatePost(PostDto postDto, Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("post","id",id));
+
+        post.setTitle(postDto.getTitle());
+        post.setDescription(postDto.getDescription());
+        post.setContent(postDto.getContent());
+
+        Post updatePost = postRepository.save(post);
+        return mapToDTO(updatePost);
+
+    }
+
+    @Override
+    public void deletePost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("post","id",id));
+        postRepository.delete(post);
+    }
+
     private PostDto mapToDTO(Post newPost) {
         PostDto postDto = new PostDto();
         postDto.setContent(newPost.getContent());

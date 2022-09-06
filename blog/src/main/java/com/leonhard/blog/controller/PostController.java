@@ -20,12 +20,37 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<PostDto> getAllPosts(){
-        return postService.getAllPosts();
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        return ResponseEntity.ok(postService.getAllPosts());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getPostById(
+            @PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(postService.getPostById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PostDto> updatePost(
+            @RequestBody PostDto postDto
+            , @PathVariable Long id) {
+
+        PostDto postResponse = postService.updatePost(postDto, id);
+        return  ResponseEntity.ok(postResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<String> deletePost(
+            @PathVariable Long id){
+
+        postService.deletePost(id);
+
+        return ResponseEntity.ok("This Post has been deleted...");
     }
 
 
