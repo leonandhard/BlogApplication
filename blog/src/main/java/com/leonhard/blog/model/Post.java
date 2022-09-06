@@ -17,14 +17,8 @@ import javax.persistence.*;
 )
 public class Post {
     @Id
-    @SequenceGenerator(
-            name = "seq",
-            sequenceName = "seq",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "seq"
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     @Column(name = "title",nullable = false)
