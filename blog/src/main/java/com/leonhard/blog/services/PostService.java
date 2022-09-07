@@ -1,13 +1,12 @@
 package com.leonhard.blog.services;
 
 import com.leonhard.blog.dtos.PostDto;
-
-import java.util.List;
+import com.leonhard.blog.dtos.PostPaginationDto;
 
 public interface PostService {
     PostDto createPost(PostDto postDto);
 
-    List<PostDto> getAllPosts();
+    PostPaginationDto getAllPosts(int pageNo, int pageSize);
 
     PostDto getPostById(Long id);
 

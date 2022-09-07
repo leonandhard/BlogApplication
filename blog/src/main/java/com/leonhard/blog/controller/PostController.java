@@ -1,18 +1,18 @@
 package com.leonhard.blog.controller;
 
 import com.leonhard.blog.dtos.PostDto;
+import com.leonhard.blog.dtos.PostPaginationDto;
 import com.leonhard.blog.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
 
-    private PostService postService;
+    private final PostService postService;
 
     public PostController(PostService postService) {
         this.postService = postService;
@@ -25,8 +25,11 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
+    public ResponseEntity<PostPaginationDto> getAllPosts(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ) {
+        return ResponseEntity.ok(postService.getAllPosts(pageNo, pageSize));
     }
 
     @GetMapping("/{id}")
@@ -41,12 +44,12 @@ public class PostController {
             , @PathVariable Long id) {
 
         PostDto postResponse = postService.updatePost(postDto, id);
-        return  ResponseEntity.ok(postResponse);
+        return ResponseEntity.ok(postResponse);
     }
 
     @DeleteMapping("/{id}")
-    public  ResponseEntity<String> deletePost(
-            @PathVariable Long id){
+    public ResponseEntity<String> deletePost(
+            @PathVariable Long id) {
 
         postService.deletePost(id);
 
