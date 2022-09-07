@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -13,7 +15,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(
-        name = "posts",uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})}
+        name = "posts", uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})}
 )
 public class Post {
     @Id
@@ -21,10 +23,16 @@ public class Post {
             strategy = GenerationType.IDENTITY
     )
     private Long id;
-    @Column(name = "title",nullable = false)
+
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "description",nullable = false)
+
+    @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "content",nullable = false)
+
+    @Column(name = "content", nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 }

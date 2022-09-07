@@ -8,6 +8,7 @@ import com.leonhard.blog.repository.PostRepository;
 import com.leonhard.blog.services.PostService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +33,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostPaginationDto getAllPosts(int pageNO, int pageSize) {
+    public PostPaginationDto getAllPosts(int pageNO, int pageSize, String sortBy, String sortDir) {
 
-        PageRequest pageable = PageRequest.of(pageNO, pageSize);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortBy).ascending() :
+                Sort.by(sortBy).descending();
+
+        PageRequest pageable = PageRequest.of(pageNO, pageSize, sort);
 
         Page<Post> posts = postRepository.findAll(pageable);
 
@@ -78,6 +83,7 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("post", "id", id));
+
         postRepository.delete(post);
     }
 
