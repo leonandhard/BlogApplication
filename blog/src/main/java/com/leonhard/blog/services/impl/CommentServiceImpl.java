@@ -23,7 +23,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
 
-    private  final CommentMapper commentMapper;
+    private final CommentMapper commentMapper;
 
     @Override
     public CommentDto createComment(Long postId, CommentDto commentDto) {

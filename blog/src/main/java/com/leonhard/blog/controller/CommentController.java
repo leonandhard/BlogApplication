@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class CommentController {
 
     @PostMapping("/posts/{postId}/comment")
     public ResponseEntity<CommentDto> createComment(@PathVariable Long postId,
-                                                    @RequestBody CommentDto commentDto) {
+                                                    @Valid @RequestBody CommentDto commentDto) {
 
         return new ResponseEntity<>(commentService.createComment(postId, commentDto), HttpStatus.CREATED);
     }
@@ -34,25 +35,25 @@ public class CommentController {
     public ResponseEntity<CommentDto> getCommentById(@PathVariable(value = "commentId") Long commentId,
                                                      @PathVariable(value = "postId") Long postId) {
 
-        CommentDto commentDto = commentService.getCommentById(postId,commentId);
+        CommentDto commentDto = commentService.getCommentById(postId, commentId);
         return ResponseEntity.ok(commentDto);
     }
 
     @PutMapping("/posts/{postId}/comment/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable(value = "postId") Long postId,
                                                     @PathVariable(value = "commentId") Long commentId,
-                                                    @RequestBody CommentDto commentDto){
+                                                    @Valid @RequestBody CommentDto commentDto) {
 
-        CommentDto updateComment = commentService.updateComment(postId,commentId,commentDto);
+        CommentDto updateComment = commentService.updateComment(postId, commentId, commentDto);
 
         return ResponseEntity.ok(updateComment);
     }
 
     @DeleteMapping("/posts/{postId}/comment/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable Long postId,
-                                                @PathVariable Long commentId){
+                                                @PathVariable Long commentId) {
 
-        commentService.deleteComment(postId,commentId);
+        commentService.deleteComment(postId, commentId);
         return ResponseEntity.ok("Comment deleted successfully");
     }
 }
