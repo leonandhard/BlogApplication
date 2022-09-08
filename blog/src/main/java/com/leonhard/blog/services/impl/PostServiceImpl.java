@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
     public PostDto createPost(PostDto postDto) {
 
         Post post = postMapper.toPostEntity(postDto);
-
+        System.out.println("post = " + post);
         Post newPost = postRepository.save(post);
 
         return postMapper.toPostDto(newPost);

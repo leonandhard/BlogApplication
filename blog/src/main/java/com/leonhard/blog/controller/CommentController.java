@@ -3,10 +3,13 @@ package com.leonhard.blog.controller;
 import com.leonhard.blog.dtos.CommentDto;
 import com.leonhard.blog.services.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.annotation.Resources;
 import java.util.List;
 
 @RestController
