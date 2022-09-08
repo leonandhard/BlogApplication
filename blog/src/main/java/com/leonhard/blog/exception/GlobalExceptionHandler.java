@@ -5,6 +5,7 @@ import com.leonhard.blog.dtos.ExceptionDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -54,8 +55,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-
-
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ExceptionDto> handleBadCredentialsException(BadCredentialsException e,WebRequest webRequest)
+            throws BadCredentialsException {
+        ExceptionDto exceptionDto = ExceptionDto.builder()
+                .details(webRequest.getDescription(false))
+                .message(e.getMessage())
+                .timestamp(new Date())
+                .build();
+        return new ResponseEntity<>(exceptionDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDto> handleGlobalException(Exception e, WebRequest webRequest) {
 
