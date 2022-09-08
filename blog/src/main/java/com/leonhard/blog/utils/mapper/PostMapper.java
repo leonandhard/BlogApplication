@@ -4,10 +4,11 @@ import com.leonhard.blog.dtos.PostDto;
 import com.leonhard.blog.model.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.stereotype.Component;
 
 @Component
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface PostMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -22,7 +23,7 @@ public interface PostMapper {
     @Mapping(target = "title", source = "title")
     @Mapping(target = "description", source = "description")
     @Mapping(target = "content", source = "content")
-    @Mapping(target = "comments",source = "comments")
+    @Mapping(target = "comments", source = "comments")
     PostDto toPostDto(Post post);
 
 }
