@@ -2,9 +2,9 @@ package com.leonhard.blog.exception;
 
 import com.leonhard.blog.dtos.ExceptionDto;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -42,7 +42,21 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+
+        Map<String, String> errors = new HashMap<>();
+        e.getBindingResult().getAllErrors().forEach((err) -> {
+            String fieldName = ((FieldError) err).getField();
+            String message = err.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+
+
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDto> handleGlobalException(Exception e, WebRequest webRequest) {
 
         ExceptionDto exceptionDto = ExceptionDto.builder()
@@ -53,18 +67,4 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(exceptionDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-
-        Map<String, String> errors = new HashMap<>();
-        e.getBindingResult().getAllErrors().forEach((err) -> {
-            String fieldName = ((FieldError) err).getField();
-            String message = err.getDefaultMessage();
-            errors.put(fieldName, message);
-        });
-        System.out.println("errors = " + errors);
-        return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
-    }
-
 }

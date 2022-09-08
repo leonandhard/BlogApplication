@@ -15,7 +15,7 @@ public class PostDto {
     private String title;
 
     @NotEmpty
-    @Size(min = 10,message = "Post description should have at least 2 characters")
+    @Size(min = 5,message = "Post description should have at least 5 characters")
     private String description;
 
     @NotEmpty
