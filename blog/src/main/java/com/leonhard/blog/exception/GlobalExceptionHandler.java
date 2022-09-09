@@ -55,19 +55,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ExceptionDto> handleBadCredentialsException(BadCredentialsException e,WebRequest webRequest)
-            throws BadCredentialsException {
-        ExceptionDto exceptionDto = ExceptionDto.builder()
-                .details(webRequest.getDescription(false))
-                .message(e.getMessage())
-                .timestamp(new Date())
-                .build();
-        return new ResponseEntity<>(exceptionDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(AccessDeniedException.class)
+    public void handleBadCredentialsException(AccessDeniedException e,WebRequest webRequest)
+            throws AccessDeniedException {
+//        ExceptionDto exceptionDto = ExceptionDto.builder()
+//                .details(webRequest.getDescription(false))
+//                .message(e.getMessage())
+//                .timestamp(new Date())
+//                .build();
+//        return new ResponseEntity<>(exceptionDto, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        throw e;
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDto> handleGlobalException(Exception e, WebRequest webRequest) {
-
         ExceptionDto exceptionDto = ExceptionDto.builder()
                 .details(webRequest.getDescription(false))
                 .message(e.getMessage())

@@ -17,8 +17,15 @@ spring:
         format_sql: true
 
 
+jwt:
+  secret: JWTSecretKey
+  expire-length: 300000
+
 logging:
   pattern:
     dateFormat: yyyy-MM-dd HH:mm:ss.SSS ZZZ
   level:
     org.springframework.security: DEBUG
+
+
+
