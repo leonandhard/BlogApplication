@@ -60,6 +60,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests(authorize ->
                         authorize
                                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
@@ -67,10 +68,11 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .authenticated()
 
-                ).exceptionHandling()
+                ).userDetailsService(userDetailsService)
+                .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint);
 
-        httpSecurity.addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

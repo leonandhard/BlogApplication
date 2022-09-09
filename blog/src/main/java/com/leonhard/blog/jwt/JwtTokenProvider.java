@@ -19,10 +19,6 @@ public class JwtTokenProvider {
     @Value("${jwt.expire-length}")
     private int jwtExpirationInMs;
 
-//    private SecretKey convert(String s) {
-//        byte[] decodedKey = Base64.getDecoder().decode(s);
-//        return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-//    }
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Date current = new Date();
@@ -37,32 +33,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getUsernameFromJWT(String token){
 
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(jwtSecret)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
-    }
-
-    public boolean validateToken(String token){
-        try {
-            Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token);
-            return true;
-        } catch (SignatureException e){
-            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Invalid JWT signature");
-        }catch (MalformedJwtException e){
-            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Invalid JWT token");
-        }catch (ExpiredJwtException e){
-            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Expired JWT token");
-        }catch (UnsupportedJwtException e){
-            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"Unsupported JWT token");
-        }catch (IllegalArgumentException e){
-            throw new BlogAPIException(HttpStatus.BAD_REQUEST,"JWT claims string is empty");
-        }
-
-    }
 
 }
