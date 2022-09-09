@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider,userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests(authorize ->
                         authorize
                                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
@@ -68,7 +68,7 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .authenticated()
 
-                ).userDetailsService(userDetailsService)
+                )
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint);
 
